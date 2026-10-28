@@ -3,7 +3,7 @@ name: Compilar APK de Android
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Esto te permite compilar manualmente con un botón
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,13 +19,18 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Crear archivos base de Gradle faltantes
+      run: |
+        echo "include(':app')" > settings.gradle.kts
+        echo "plugins { id('com.android.application') version '8.2.0' apply false; id('org.jetbrains.kotlin.android') version '1.9.0' apply false }" > build.gradle.kts
+
     - name: Crear instalador Gradle temporal
       run: |
         gradle wrapper --gradle-version 8.2
         chmod +x gradlew
 
     - name: Compilar la aplicación (Generar APK)
-      run: ./gradlew assembleDebug
+      run: ./gradlew :app:assembleDebug
 
     - name: Subir el APK resultante para descargar
       uses: actions/upload-artifact@v4
