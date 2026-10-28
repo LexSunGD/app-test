@@ -21,7 +21,7 @@ jobs:
 
     - name: Crear archivos base de Gradle faltantes
       run: |
-        echo 'include(":app")' > settings.gradle.kts
+        echo -e 'pluginManagement {\n    repositories {\n        google()\n        mavenCentral()\n        gradlePluginPortal()\n    }\n}\nrootProject.name = "app-test"\ninclude(":app")' > settings.gradle.kts
         echo 'plugins { id("com.android.application") version "8.2.0" apply false; id("org.jetbrains.kotlin.android") version "1.9.0" apply false }' > build.gradle.kts
 
     - name: Crear instalador Gradle temporal
@@ -37,4 +37,4 @@ jobs:
       with:
         name: MiAppPrueba-Digital
         path: app/build/outputs/apk/debug/app-debug.apk
-        
+      
